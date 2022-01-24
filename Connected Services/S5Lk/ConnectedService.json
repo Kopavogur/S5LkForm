@@ -1,0 +1,65 @@
+{
+  "ExtendedData": {
+    "inputs": [
+      "https://leigukerfi.kopavogur.is/lisaws/service.asmx"
+    ],
+    "collectionTypes": [
+      "System.Array",
+      "System.Collections.Generic.Dictionary`2"
+    ],
+    "messageContract": true,
+    "namespaceMappings": [
+      "*, S5Lk"
+    ],
+    "references": [
+      "Azure.Core, {Azure.Core, 1.4.1}",
+      "Azure.Identity, {Azure.Identity, 1.2.3}",
+      "Azure.Security.KeyVault.Certificates, {Azure.Security.KeyVault.Certificates, 4.1.0}",
+      "Azure.Security.KeyVault.Secrets, {Azure.Security.KeyVault.Secrets, 4.1.0}",
+      "Microsoft.AspNetCore.Authentication.JwtBearer, {Microsoft.AspNetCore.Authentication.JwtBearer, 5.0.9}",
+      "Microsoft.AspNetCore.Authentication.OpenIdConnect, {Microsoft.AspNetCore.Authentication.OpenIdConnect, 5.0.9}",
+      "Microsoft.AspNetCore.Mvc.Razor.Extensions, {Microsoft.AspNetCore.Mvc.Razor.Extensions, 5.0.9}",
+      "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation, {Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation, 5.0.9}",
+      "Microsoft.AspNetCore.Razor.Language, {Microsoft.AspNetCore.Razor.Language, 5.0.9}",
+      "Microsoft.Bcl.AsyncInterfaces, {Microsoft.Bcl.AsyncInterfaces, 1.0.0}",
+      "Microsoft.CodeAnalysis, {Microsoft.CodeAnalysis.Common, 3.8.0}",
+      "Microsoft.CodeAnalysis.CSharp, {Microsoft.CodeAnalysis.CSharp, 3.8.0}",
+      "Microsoft.CodeAnalysis.Razor, {Microsoft.CodeAnalysis.Razor, 5.0.9}",
+      "Microsoft.Extensions.DependencyModel, {Microsoft.Extensions.DependencyModel, 5.0.0}",
+      "Microsoft.Identity.Client, {Microsoft.Identity.Client, 4.19.0}",
+      "Microsoft.Identity.Client.Extensions.Msal, {Microsoft.Identity.Client.Extensions.Msal, 2.12.0}",
+      "Microsoft.Identity.Web, {Microsoft.Identity.Web, 1.1.0}",
+      "Microsoft.Identity.Web.UI, {Microsoft.Identity.Web.UI, 1.1.0}",
+      "Microsoft.Identity.Web.UI.Views, {Microsoft.Identity.Web.UI, 1.1.0}",
+      "Microsoft.IdentityModel.JsonWebTokens, {Microsoft.IdentityModel.JsonWebTokens, 6.7.1}",
+      "Microsoft.IdentityModel.Logging, {Microsoft.IdentityModel.Logging, 6.7.1}",
+      "Microsoft.IdentityModel.Protocols, {Microsoft.IdentityModel.Protocols, 6.7.1}",
+      "Microsoft.IdentityModel.Protocols.OpenIdConnect, {Microsoft.IdentityModel.Protocols.OpenIdConnect, 6.7.1}",
+      "Microsoft.IdentityModel.Tokens, {Microsoft.IdentityModel.Tokens, 6.7.1}",
+      "System.Collections.Immutable, {System.Collections.Immutable, 5.0.0}",
+      "System.Diagnostics.DiagnosticSource, {System.Diagnostics.DiagnosticSource, 4.6.0}",
+      "System.IdentityModel.Tokens.Jwt, {System.IdentityModel.Tokens.Jwt, 6.7.1}",
+      "System.Reflection.DispatchProxy, {System.Reflection.DispatchProxy, 4.7.1}",
+      "System.Reflection.Metadata, {System.Reflection.Metadata, 5.0.0}",
+      "System.Runtime.CompilerServices.Unsafe, {System.Runtime.CompilerServices.Unsafe, 4.7.1}",
+      "System.Security.AccessControl, {System.Security.AccessControl, 4.7.0}",
+      "System.Security.Cryptography.Cng, {System.Security.Cryptography.Cng, 4.7.0}",
+      "System.Security.Cryptography.ProtectedData, {System.Security.Cryptography.ProtectedData, 4.5.0}",
+      "System.Security.Cryptography.Xml, {System.Security.Cryptography.Xml, 4.7.0}",
+      "System.Security.Permissions, {System.Security.Permissions, 4.7.0}",
+      "System.Security.Principal.Windows, {System.Security.Principal.Windows, 4.7.0}",
+      "System.ServiceModel, {System.ServiceModel.Primitives, 4.8.1}",
+      "System.ServiceModel.Duplex, {System.ServiceModel.Duplex, 4.8.1}",
+      "System.ServiceModel.Http, {System.ServiceModel.Http, 4.8.1}",
+      "System.ServiceModel.NetTcp, {System.ServiceModel.NetTcp, 4.8.1}",
+      "System.ServiceModel.Primitives, {System.ServiceModel.Primitives, 4.8.1}",
+      "System.ServiceModel.Security, {System.ServiceModel.Security, 4.8.1}",
+      "System.Text.Encoding.CodePages, {System.Text.Encoding.CodePages, 4.5.1}",
+      "System.Text.Json, {System.Text.Json, 4.6.0}",
+      "System.Windows.Extensions, {System.Windows.Extensions, 4.7.0}"
+    ],
+    "sync": true,
+    "targetFramework": "net5.0",
+    "typeReuseMode": "All"
+  }
+}

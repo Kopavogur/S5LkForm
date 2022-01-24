@@ -1,0 +1,43 @@
+﻿@model DataTable
+
+@{ 
+    ViewData["Title"] = "Fellilistar";
+    List<DataRow> rowList = (
+        from o in Model.AsEnumerable()
+        orderby o.Field<string>("Listid"), o.Field<string>("Itemid") ascending
+        select o
+    ).ToList();
+
+    HashSet<string> columnNames = new() { "Listid", "Itemid", "Itemvalue" };
+    int[] colOrdinals = new int[columnNames.Count];
+}
+
+<h3>Fellilistar</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            @{
+                int c = 0;
+            }
+            @foreach (string colName in columnNames)
+            {
+                DataColumn col = Model.Columns[colName];
+                colOrdinals[c++] = col.Ordinal;
+                <th scope="col">@col.Caption</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DataRow row in rowList)
+        {
+        <tr>
+            @foreach (int cc in colOrdinals)
+            {
+                var cell = row.ItemArray[cc];
+                <td>@cell.ToString()</td>
+            }
+        </tr>
+        }
+    </tbody>
+</table>

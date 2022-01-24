@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S5LkForm", "S5LkForm.csproj", "{D17C42F0-48C4-48BD-A083-49A1EB9C4C45}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D17C42F0-48C4-48BD-A083-49A1EB9C4C45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D17C42F0-48C4-48BD-A083-49A1EB9C4C45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D17C42F0-48C4-48BD-A083-49A1EB9C4C45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D17C42F0-48C4-48BD-A083-49A1EB9C4C45}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E4C552EC-0852-4069-8C6D-FC898720844D}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div>
+    <div>
+        <a class="nav-link text-dark" asp-controller="Home" asp-action="ListStofnanir"><i class="fas fa-industry"></i>&nbsp;Stofnanir</a>
+    </div>
+    <div>
+        <a class="nav-link text-dark" asp-controller="Home" asp-action="CreateAndUpdateBeidni"><i class="fas fa-plus"></i>&nbsp;Ný Beiðni</a>
+    </div>
+    <div>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ListBeidni"><i class="fas fa-file-invoice-dollar"></i>&nbsp;Allar Beiðnir</a>
+    </div>
+    <br/>
+    <div>
+        <a class="nav-link text-dark" href="https://leigukerfi.kopavogur.is/">
+            <img src="img/d1b.png" height="80" />
+            <br />
+            Tengjast Leigukerfi
+        </a>
+    </div>
+</div>

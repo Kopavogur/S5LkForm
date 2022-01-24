@@ -1,0 +1,50 @@
+﻿@model DataTable
+
+@{ 
+    ViewData["Title"] = "Stofnanir";
+    List<DataRow> rowList = (
+        from o in Model.AsEnumerable()
+        orderby o.Field<string>("Heiti") ascending
+        select o
+    ).ToList();
+
+    HashSet<string> columnNames = new() { "Númer", "Heiti", "Heimilisfang", "Tegund", "Póstnúmer" };
+    int[] colOrdinals = new int[columnNames.Count];
+}
+
+<h3>Stofnanir</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            @{
+                int c = 0;
+            }
+            @foreach (string colName in columnNames)
+            {
+                DataColumn col = Model.Columns[colName];
+                colOrdinals[c++] = col.Ordinal;
+                <th scope="col">@col.Caption</th>
+            }
+            <th scope="col"><span class="float-right">Aðgerðir</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DataRow row in rowList)
+        {
+        <tr>
+            @foreach (int cc in colOrdinals)
+            {
+                var cell = row.ItemArray[cc];
+                <td>@cell.ToString()</td>
+            }
+        <td>
+            <span class="float-right">
+                <a asp-controller="Home" asp-action="CreateAndUpdateBeidni" asp-route-IBU="@row.ItemArray[0].ToString()"><i class="fas fa-plus"></i></a>
+                <a asp-controller="Home" asp-action="ListBeidni" asp-route-IBU="@row.ItemArray[0].ToString()"><i class="fas fa-file-invoice-dollar"></i></a>
+            </span>
+        </td>
+        </tr>
+        }
+    </tbody>
+</table>

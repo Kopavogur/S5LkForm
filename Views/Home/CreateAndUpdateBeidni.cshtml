@@ -1,0 +1,201 @@
+﻿@model HomeController.BeidniModel
+@{
+    List<SelectListItem> ibuList = (
+        from o in Model.StofnanirTable.AsEnumerable()
+        orderby o.Field<string>("Heiti") ascending
+        select new SelectListItem
+        {
+            Text = o.Field<string>("Heiti"),
+            Value = o.Field<string>("Númer"),
+            Selected = (o.Field<string>("Númer") == Model.Values.IBU)
+        }
+    ).ToList();
+    List<SelectListItem> forgangurList = (
+        from o in Model.ForgangurTable.AsEnumerable()
+        orderby o.Field<string>("Itemvalue") ascending
+        select new SelectListItem
+        {
+            Text = o.Field<string>("Itemid"),
+            Value = o.Field<string>("Itemvalue"),
+            Selected = (o.Field<string>("Itemvalue") == Model.Values.Forgangur)
+        }
+    ).ToList();
+}
+
+@if (string.IsNullOrEmpty(Model.Values.S5RequestID))
+{
+    ViewData["Title"] = "Skrá nýja Beiðni";
+    <h3>Skrá nýja Beiðni</h3>
+}
+else
+{
+    ViewData["Title"] = "Breyta Beiðni";
+    <h3>Breyta Beiðni</h3>
+}
+
+<form method="post" id="newForm" enctype="multipart/form-data">
+    <div class="mb-2 row">
+        <label for="staticIBU" class="col-sm-2 col-form-label">Stofnun</label>
+        <div class="col-sm-10">
+            <select name="IBU" asp-items="ibuList" class="form-control" id="staticIBU">
+                <option value="">--- Veldu Stofunun ---</option>
+            </select>
+        </div>
+    </div>
+    <div class="mb-2 row">
+        <label for="staticForgangur" class="col-sm-2 col-form-label">Forgangur</label>
+        <div class="col-sm-10">
+            <select name="Forgangur" asp-items="forgangurList" class="form-control" id="staticForgangur">
+                <option value="">--- Veldu Forgang ---</option>
+            </select>
+        </div>
+    </div>
+    <div class="mb-2 row">
+        <label for="staticTengilidur" class="col-sm-2 col-form-label">Nafn Tengiliðs</label>
+        <div class="col-sm-10">
+            <input name="Tengilidur" type="text" class="form-control" id="staticTengilidur" value="@Model.Values.Nafn_tengilids">
+        </div>
+    </div>
+    <div class="mb-2 row">
+        <label for="staticSimi" class="col-sm-2 col-form-label">Sími Tengiliðs</label>
+        <div class="col-sm-10">
+            <input name="Simi" type="text" class="form-control" id="staticSimi" value="@Model.Values.Simi_tengilids">
+        </div>
+    </div>
+    <div class="mb-2 row">
+        <label for="staticHeiti" class="col-sm-2 col-form-label">Heiti</label>
+        <div class="col-sm-10">
+            <input name="Heiti" type="text" class="form-control" id="staticHeiti" value="@Model.Values.Heiti">
+        </div>
+    </div>
+    <div class="mb-2 row">
+        <label for="staticLysing" class="col-sm-2 col-form-label">Lysing</label>
+        <div class="col-sm-10">
+            <textarea name="Lysing" class="form-control" id="staticLysing" rows="6">@Model.Values.Lysing</textarea>
+        </div>
+    </div>
+
+    <div id="files">
+        @if (Model.SkjolTable.TableName != "xxxEmpty")
+        {
+            foreach (DataRow row in Model.SkjolTable.Rows)
+            {
+            <div class="mb-2 row">
+                <label class="col-sm-2 col-form-label">
+                    Skjal
+                </label>
+                <div class="col-sm-10">
+                    <button type="button" class="btn btn-danger">X</button>
+                    @row.ItemArray[Model.SkjolTable.Columns["Subject"].Ordinal]
+                </div>
+            </div>
+            }
+        }
+        <div class="mb-2 row">
+            <label class="col-sm-2 col-form-label">
+                Ný Skjöl
+            </label>
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-primary" id="addFile">+</button>
+            </div>
+        </div>
+
+        <div class="mb-2 row" id="fileTemplate">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div class="input-group">
+                    <input name="Files" type="file" class="form-control">
+                    <div class="d-none input-group-append">
+                        <button type="button" class="input-group-text bg-danger text-white delete">X</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-2 row">
+        <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary float-end">Vista</button>
+        </div>
+    </div>
+</form>
+
+@if (!string.IsNullOrEmpty(Model.Values.S5RequestID))
+{
+    BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance;
+    Dictionary<string, object> valuesMap = Model.Values.GetType().GetProperties(bindingAttr).ToDictionary
+    (
+        propInfo => propInfo.Name,
+        propInfo => propInfo.GetValue(Model.Values, null)
+    );
+
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <a class="btn btn-light" data-toggle="collapse" href="#beidniRaw" role="button" aria-expanded="false" aria-controls="beidniRaw">Sýna Hrágögn</a>
+        </div>
+    </div>
+
+    <div class="container collapse multi-collapse" id="beidniRaw">
+        @foreach (string key in valuesMap.Keys)
+        {
+        <div class="row">
+            <div class="col-sm-2">@key</div>
+            <div class="col-sm-10">
+                @valuesMap[key]
+            </div>
+        </div>
+        }
+        @if (Model.SkjolTable.TableName != "xxxEmpty")
+        {
+            HashSet<string> columnNames = new() { "AutoID", "Subject", "CreatedTime" };
+            int[] colOrdinals = new int[columnNames.Count];
+
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        @{
+                            int c = 0;
+                        }
+                        @foreach (string colName in columnNames)
+                        {
+                            DataColumn col = Model.SkjolTable.Columns[colName];
+                            colOrdinals[c++] = col.Ordinal;
+                        <th scope="col">@col.Caption</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in Model.SkjolTable.Rows)
+                    {
+                    <tr>
+                        @foreach (int cc in colOrdinals)
+                        {
+                            var cell = row.ItemArray[cc];
+                            <td>@cell.ToString()</td>
+                        }
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    }
+
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            $('#addFile').click(function () {
+                var newFileDiv = $('<div/>', {
+                    class: "mb-2 row deletable",
+                    html: $('#fileTemplate').clone().html()
+                });
+                newFileDiv.find('.d-none').removeClass('d-none');
+                $('#files').append(newFileDiv);
+                $('.delete').click(function (event) {
+                    $(this).closest('.deletable').remove();
+                });
+            });
+        });
+        //]]>
+    </script>
+
