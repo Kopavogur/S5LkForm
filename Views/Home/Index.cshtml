@@ -10,14 +10,17 @@
         <a class="nav-link text-dark" asp-controller="Home" asp-action="CreateAndUpdateBeidni"><i class="fas fa-plus"></i>&nbsp;Ný Beiðni</a>
     </div>
     <div>
-        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ListBeidni"><i class="fas fa-file-invoice-dollar"></i>&nbsp;Allar Beiðnir</a>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ListBeidni" asp-route-State="open" asp-route-Umbedid_af="@User.Identity.Name"><i class="fas fa-user"></i>&nbsp;Mínar Beiðnir</a>
     </div>
-    <br/>
+    <div>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ListBeidni" asp-route-State="open"><i class="fas fa-file-invoice-dollar"></i>&nbsp;Allar Beiðnir</a>
+    </div>
+    <br />
     <div>
         <a class="nav-link text-dark" href="https://leigukerfi.kopavogur.is/">
-            <img src="img/d1b.png" height="80" />
+            <img src="~/img/d1b.png" height="80" />
             <br />
-            Tengjast Leigukerfi
+            <i class="fas fa-cog"></i>&nbsp;Tengjast Leigukerfi
         </a>
     </div>
 </div>

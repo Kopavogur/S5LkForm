@@ -1,11 +1,11 @@
 ﻿@model DataTable
 
-@{ 
+@{
     ViewData["Title"] = "Beiðnir";
 
     List<DataRow> rowList;
     HashSet<string> columnNames;
-    if (Model.TableName == "xxxEmpty")
+    if (Model.TableName == S5Client.Empty)
     {
         rowList = (from o in Model.AsEnumerable() select o).ToList();
         columnNames = new() { "Skilaboð" };
@@ -21,35 +21,66 @@
     }
 }
 
-<h3>Beiðnir</h3>
-
-<table class="table">
-    <thead>
-        <tr>
-            @foreach (string colName in columnNames)
+<nav class="navbar navbar-expand-sm navbar-light bg-white pl-0">
+    <h3>Beiðnir</h3>
+    <div class="container">
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                @if (ViewBag.Umbedid_af != User.Identity.Name)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ListBeidni" asp-route-IBU="@ViewBag.IBU" asp-route-Umbedid_af="@User.Identity.Name" asp-route-State="@ViewBag.State">Allra</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ListBeidni" asp-route-IBU="@ViewBag.IBU" asp-route-State="@ViewBag.State">Mínar</a>
+                    </li>
+                }
+                @if (ViewBag.State != "open")
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ListBeidni" asp-route-IBU="@ViewBag.IBU" asp-route-Umbedid_af="@ViewBag.Umbedid_af" asp-route-State="open">Allar</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ListBeidni" asp-route-IBU="@ViewBag.IBU" asp-route-Umbedid_af="@ViewBag.Umbedid_af">Opnar</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+        <table class="table">
+            <thead>
+                <tr>
+                    @foreach (string colName in columnNames)
             {
                 DataColumn col = Model.Columns[colName];
-                <th scope="col">@col.Caption</th>
+                    <th scope="col">@col.Caption</th>
             }
-            <th scope="col"><span class="float-right">Aðgerðir</span></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (DataRow row in rowList)
+                    <th scope="col"><span class="float-right">Aðgerðir</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in rowList)
         {
-        <tr>
-            @foreach (string colName in columnNames)
+                <tr>
+                    @foreach (string colName in columnNames)
             {
                 var cell = row.ItemArray[Model.Columns[colName].Ordinal];
-                <td>@cell.ToString()</td>
+                    <td>@cell.ToString()</td>
             }
-            <td>
-                @if (Model.TableName != "xxxEmpty")
-                {
-                    <a class="float-right" asp-controller="Home" asp-action="CreateAndUpdateBeidni" asp-route-S5RequestID="@row.ItemArray[Model.Columns["Númer"].Ordinal].ToString()"><i class="fas fa-eye"></i></a>
-                }
-            </td>
-        </tr>
+                    <td>
+                        @if (Model.TableName != S5Client.Empty)
+                        {
+                        <a class="float-right" asp-controller="Home" asp-action="CreateAndUpdateBeidni" asp-route-S5RequestID="@row.ItemArray[Model.Columns["Númer"].Ordinal].ToString()"><i class="fas fa-eye"></i></a>
+                        }
+                    </td>
+                </tr>
         }
-    </tbody>
-</table>
+            </tbody>
+        </table>

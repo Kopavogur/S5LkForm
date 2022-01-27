@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using S5Lk;
 using S5LkForm.Models;
@@ -12,7 +11,6 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
@@ -41,10 +39,15 @@ namespace S5LkForm.Controllers
         }
 
         public IActionResult ListBeidni(
-            string IBU
+            string IBU,
+            string Umbedid_af,
+            string State
         )
         {
-            return View(BeidniTable(IBU));
+            ViewBag.IBU = IBU;
+            ViewBag.Umbedid_af = Umbedid_af;
+            ViewBag.State = State;
+            return View(BeidniTable(IBU, Umbedid_af, State));
         }
 
         public IActionResult ListFellilistar(
@@ -66,10 +69,12 @@ namespace S5LkForm.Controllers
         }
 
         private DataTable BeidniTable(
-            string IBU = "*"
+            string IBU = "*",
+            string Umbedid_af = null,
+            string State = null
         )
         {
-            return S5Client.CallTable(
+            DataTable resTable = S5Client.CallTable(
                 new GetViewBeidnirStofnanirRequest()
                 {
                     S5Username = S5Client.User,
@@ -77,6 +82,21 @@ namespace S5LkForm.Controllers
                     Stofnun = IBU
                 }
             );
+            if (!S5Client.IsEmpty(resTable) && !string.IsNullOrEmpty(Umbedid_af))
+            {
+                var res = from r in resTable.AsEnumerable()
+                    where r.Field<string>("Umbeðið af") == Umbedid_af
+                    select r;
+                resTable = S5Client.ToDataTable(res);
+            }
+            if (!S5Client.IsEmpty(resTable) && State == "open")
+            {
+                var res = from r in resTable.AsEnumerable()
+                    where r.Field<string>("Staða") != "Lokið"
+                    select r;
+                resTable = S5Client.ToDataTable(res);
+            }
+            return resTable;
         }
 
         private DataTable FellilistarTable(
@@ -158,7 +178,7 @@ namespace S5LkForm.Controllers
                 { 
                     Values = values, 
                     StofnanirTable = StofnanirTable(),
-                    SkjolTable = SkjolTable(S5RequestID ?? "xxxEmpty"),
+                    SkjolTable = SkjolTable(S5RequestID ?? S5Client.Empty),
                     ForgangurTable = FellilistarTable("BEI_Forgangur")
                 }
             );

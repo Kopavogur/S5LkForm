@@ -76,7 +76,7 @@ else
     </div>
 
     <div id="files">
-        @if (Model.SkjolTable.TableName != "xxxEmpty")
+        @if (Model.SkjolTable.TableName != S5Client.Empty)
         {
             foreach (DataRow row in Model.SkjolTable.Rows)
             {
@@ -145,7 +145,7 @@ else
             </div>
         </div>
         }
-        @if (Model.SkjolTable.TableName != "xxxEmpty")
+        @if (Model.SkjolTable.TableName != S5Client.Empty)
         {
             HashSet<string> columnNames = new() { "AutoID", "Subject", "CreatedTime" };
             int[] colOrdinals = new int[columnNames.Count];

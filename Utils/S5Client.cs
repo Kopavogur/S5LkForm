@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using S5Lk;
 using System;
+using System.Collections;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,15 @@ namespace S5LkForm.Utils
 {
     public class S5Client
     {
+        public const string Empty = "xxxEmpty";
+
+        public static readonly DataTable EmptyDataTable = new()
+        {
+            TableName = Empty,
+                        Columns = { { "Skilaboð", typeof(string) } },
+                        Rows = { { "Engin gögn fundust." } }
+        };
+
         public IConfiguration Configuration { get; }
 
         public ChannelFactory<ServiceSoap> Factory { get; set; }
@@ -76,13 +86,7 @@ namespace S5LkForm.Utils
             ReturnValueView view = (ReturnValueView)response.GetType().GetField(mName + "Result").GetValue(response);
             if (view.table.Any1.IsEmpty)
             {
-                return 
-                    new DataTable()
-                    { 
-                        TableName = "xxxEmpty",
-                        Columns = { { "Skilaboð", typeof(string) } },
-                        Rows = { { "Engin gögn fundust." } }
-                    };
+                return EmptyDataTable;
             }
 
             //Populate DataSet and retrieve the "Object" table
@@ -94,6 +98,30 @@ namespace S5LkForm.Utils
             DataTable table = dataSet.Tables[tName];
 
             return table;
+        }
+
+        public DataTable ToDataTable(EnumerableRowCollection<DataRow> enu)
+        {
+            try
+            {
+                return enu.CopyToDataTable();
+            }
+            catch(Exception)
+            {
+                return EmptyDataTable;
+            }
+        }
+
+        public bool IsEmpty(DataTable dt)
+        {
+            if (dt == EmptyDataTable)
+            {
+                return true;
+            }
+            else 
+            {
+                return dt.Rows.Count == 0;
+            }
         }
     }
 }
