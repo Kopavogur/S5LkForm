@@ -209,15 +209,16 @@ namespace S5LkForm.Controllers
         )
         {
             ValuesBEI values = DoBeidni(IBU, Heiti, Lysing, files, null, User.Identity.Name, null, Tengilidur, Simi, null, null, Forgangur, null, null, null, null, null);
-            ViewBag.ResultOfLastRequest = values;
-            return View(
-                new BeidniModel { 
-                    Values = values, 
-                    StofnanirTable = StofnanirTable(),
-                    SkjolTable = SkjolTable(values.S5RequestID),
-                    ForgangurTable = FellilistarTable("BEI_Forgangur")
-                }
-            );
+            //ViewBag.ResultOfLastRequest = values;
+            //return View(
+            //    new BeidniModel { 
+            //        Values = values, 
+            //        StofnanirTable = StofnanirTable(),
+            //        SkjolTable = SkjolTable(values.S5RequestID),
+            //        ForgangurTable = FellilistarTable("BEI_Forgangur")
+            //    }
+            //);
+            return RedirectToAction("ListBeidni", new { Umbedid_af = User.Identity.Name });
         }
 
         private ValuesBEI DoBeidni(
