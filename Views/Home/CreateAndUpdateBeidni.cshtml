@@ -74,6 +74,18 @@ else
             <textarea name="Lysing" class="form-control" id="staticLysing" rows="6">@Model.Values.Lysing</textarea>
         </div>
     </div>
+    <div class="mb-2 row">
+        <label for="staticSvar" class="col-sm-2 col-form-label">Svar</label>
+        <div class="col-sm-10">
+            <textarea readonly class="form-control" id="staticSvar" rows="6">@Model.Values.Svar_til_leigjanda</textarea>
+        </div>
+    </div>
+    <div class="mb-2 row">
+        <label for="staticTengilidur" class="col-sm-2 col-form-label">Tengiliður</label>
+        <div class="col-sm-10">
+            <input readonly type="text" class="form-control" id="staticTengilidur" value="@Model.Values.Nafn_tengilids">
+        </div>
+    </div>
 
     <div id="files">
         @if (Model.SkjolTable.TableName != S5Client.Empty)
