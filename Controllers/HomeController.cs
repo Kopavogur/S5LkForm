@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -199,6 +200,7 @@ namespace S5LkForm.Controllers
 
         [HttpPost]
         public IActionResult CreateAndUpdateBeidni(
+            string S5RequestID,
             string IBU,
             string Heiti,
             string Lysing,
@@ -208,20 +210,12 @@ namespace S5LkForm.Controllers
             List<IFormFile> files
         )
         {
-            ValuesBEI values = DoBeidni(IBU, Heiti, Lysing, files, null, User.Identity.Name, null, Tengilidur, Simi, null, null, Forgangur, null, null, null, null, null);
-            //ViewBag.ResultOfLastRequest = values;
-            //return View(
-            //    new BeidniModel { 
-            //        Values = values, 
-            //        StofnanirTable = StofnanirTable(),
-            //        SkjolTable = SkjolTable(values.S5RequestID),
-            //        ForgangurTable = FellilistarTable("BEI_Forgangur")
-            //    }
-            //);
+            ValuesBEI values = DoBeidni(S5RequestID, IBU, Heiti, Lysing, files, null, User.Identity.Name, null, Tengilidur, Simi, null, null, Forgangur, null, null, null, null, null);
             return RedirectToAction("ListBeidni", new { Umbedid_af = User.Identity.Name });
         }
 
         private ValuesBEI DoBeidni(
+            string S5RequestID,
             string IBU,
             string Heiti,
             string Lysing,
@@ -244,28 +238,78 @@ namespace S5LkForm.Controllers
         {
             client ??= S5Client.Get;
 
-            CreateAndUpdateBeidni_PRequest request = new()
+            ValuesBEI values;
+            try
             {
-                S5Username = S5Client.User,
-                S5Password = S5Client.Password,
-                IBU = IBU,
-                Nafn_tengilids = Tengilidur,
-                Simi_tengilids = Simi,
-                Forgangur = Forgangur,
-                Heiti = Heiti,
-                Lysing = Lysing,
-                Umbedid_af = Umbedid_af
-            };
+                if (string.IsNullOrWhiteSpace(S5RequestID))
+                {
+                    CreateAndUpdateBeidni_PRequest request = new()
+                    {
+                        S5Username = S5Client.User,
+                        S5Password = S5Client.Password,
+                        IBU = IBU,
+                        Nafn_tengilids = Tengilidur,
+                        Simi_tengilids = Simi,
+                        Forgangur = Forgangur,
+                        Heiti = Heiti,
+                        Lysing = Lysing,
+                        Umbedid_af = Umbedid_af
+                    };
 
-            Task<CreateAndUpdateBeidni_PResponse> task = client.CreateAndUpdateBeidni_PAsync(request);
-            ReturnValueBEI result = task.Result.CreateAndUpdateBeidni_PResult;
-            if (result != null && !result.success)
-            {
-                throw new Exception($"CreateAndUpdateBeidni failes with {result.message}");
+                    Task<CreateAndUpdateBeidni_PResponse> task = client.CreateAndUpdateBeidni_PAsync(request);
+                    ReturnValueBEI result = task.Result.CreateAndUpdateBeidni_PResult;
+                    if (result != null && !result.success)
+                    {
+                        throw new Exception($"CreateAndUpdateBeidni failes with {result.message}");
+                    }
+                    values = result.values;
+                }
+                else
+                { 
+                    GetBeidniRequest getRequest = new()
+                    {
+                        S5Username = S5Client.User,
+                        S5Password = S5Client.Password,
+                        S5RequestID = S5RequestID
+                    };
+                    GetBeidniResponse getResponse = client.GetBeidni(getRequest);
+
+                    if (getResponse.GetBeidniResult.success)
+                    {
+                        values = getResponse.GetBeidniResult.values;
+                    }
+                    else
+                    {
+                        throw new Exception($"Gat ekki lesið Beidni fyrir S5RequstID={S5RequestID}");
+                    }
+
+                    values.Nafn_tengilids = Tengilidur;
+                    values.Simi_tengilids = Simi;
+                    values.Forgangur = Forgangur;
+                    values.Heiti = Heiti;
+                    values.Lysing = Lysing;
+                    values.Umbedid_af = Umbedid_af;
+                    UpdateBeidniRequest updateBeidniRequest = new()
+                    {
+                        S5Username = S5Client.User,
+                        S5Password = S5Client.Password,
+                        values = values
+                    };
+
+                    UpdateBeidniResponse updateResponse = client.UpdateBeidni(updateBeidniRequest);
+                    ReturnValueBEI result = updateResponse.UpdateBeidniResult;
+                    if (result != null && !result.success)
+                    {
+                        throw new Exception($"UpdateBeidni failes with {result.message}");
+                    }
+                }
+
+                if (files != null) DoAddFiles(values.S5RequestID, files, client);
             }
-            ValuesBEI values = result.values;
-
-            if (files != null) DoAddFiles(values.S5RequestID, files, client);
+            finally
+            {
+                ((IClientChannel)client).Close();
+            }
 
             return values;
         }
